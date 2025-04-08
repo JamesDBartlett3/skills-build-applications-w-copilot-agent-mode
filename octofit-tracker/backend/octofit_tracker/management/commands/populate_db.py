@@ -1,7 +1,12 @@
+import logging
 from django.core.management.base import BaseCommand
 from octofit_tracker.models import User, Team, Activity, Leaderboard, Workout
 from datetime import timedelta
 from bson import ObjectId
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class Command(BaseCommand):
     help = 'Populate the database with test data for users, teams, activity, leaderboard, and workouts'
@@ -23,6 +28,7 @@ class Command(BaseCommand):
             User(_id=ObjectId(), username='sleeptoken', email='sleeptoken@mhigh.edu', password='sleeptokenpassword'),
         ]
         User.objects.bulk_create(users)
+        logger.info(f"Inserted {len(users)} users into the database.")
 
         # Create teams
         team1 = Team(_id=ObjectId(), name='Blue Team')
