@@ -7,8 +7,10 @@ class ObjectIdField(serializers.Field):
         return str(value)
 
     def to_internal_value(self, data):
-        return ObjectId(data)
-
+        try:
+            return ObjectId(data)
+        except bson.errors.InvalidId:
+            raise serializers.ValidationError("Invalid ObjectId string")
 class UserSerializer(serializers.ModelSerializer):
     _id = ObjectIdField()
 
